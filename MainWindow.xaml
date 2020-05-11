@@ -1,0 +1,88 @@
+﻿<mah:MetroWindow
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:quickPlay="clr-namespace:QuickPlay"
+        xmlns:properties="clr-namespace:QuickPlay.Properties"
+        x:Class="QuickPlay.MainWindow"
+        mc:Ignorable="d"
+        Background="#242424"
+        Title="QuickPlay" Height="320" Width="600">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="206*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="84*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="180*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="180*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="180*"/>
+            <ColumnDefinition Width="10*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="Currently Playing" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2">
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Vertical">
+                <quickPlay:FileSaveBrowser x:Name="CurrentlyPlayingFile"/>
+                <Separator/>
+                <TextBox x:Name="CurrentlyPlayingFormat" Height="64" TextInput="CurrentlyPlayingFormat_TextInput" Text="%%track%%&#xD;&#xA;%%artist%%"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Current Track" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2">
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Vertical">
+                <quickPlay:FileSaveBrowser x:Name="CurrentTrackFile"/>
+                <Separator/>
+                <CheckBox x:Name="CheckUseTrackSeparator" Content="　　　　　Use Overflow" FlowDirection="RightToLeft" HorizontalAlignment="Left" IsChecked="{Binding Path=UseTrackSeparator, Mode=OneWayToSource}"/>
+                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Vertical" Margin="10,2,4,2" IsEnabled="{Binding Path=UseTrackSeparator}">
+                    <Grid Height="26" Margin="2">
+                        <Label Content="Separator" HorizontalAlignment="Left"/>
+                        <TextBox x:Name="CurrentTrackSeparator" Text="　・　" Width="80" HorizontalAlignment="Right" TextChanged="CurrentTrackSeparator_TextChanged"/>
+                    </Grid>
+                    <Grid Height="26" Margin="2">
+                        <Label Content="Min Length" HorizontalAlignment="Left"/>
+                        <mah:NumericUpDown x:Name="CurrentTrackSeparatorMinLength" Value="40" Width="70" HorizontalAlignment="Right" ValueChanged="CurrentTrackSeparatorMinLength_ValueChanged"/>
+                    </Grid>
+                    <quickPlay:FileSaveBrowser x:Name="CurrentTrackFileOverflow"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Current Artist" Grid.Row="0" Grid.Column="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2">
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Vertical">
+                <quickPlay:FileSaveBrowser x:Name="CurrentArtistFile"/>
+                <Separator/>
+                <CheckBox x:Name="CheckUseArtistSeparator" Content="　　　　　Use Overflow" FlowDirection="RightToLeft" HorizontalAlignment="Left" IsChecked="{Binding Path=UseArtistSeparator, Mode=OneWayToSource}"/>
+                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Vertical" Margin="10,2,4,2" IsEnabled="{Binding Path=UseArtistSeparator}">
+                    <Grid Height="26" Margin="2">
+                        <Label Content="Separator" HorizontalAlignment="Left"/>
+                        <TextBox x:Name="CurrentArtistSeparator" Text="　・　" Width="80" HorizontalAlignment="Right" TextChanged="CurrentArtistSeparator_TextChanged"/>
+                    </Grid>
+                    <Grid Height="26" Margin="2">
+                        <Label Content="Min Length" HorizontalAlignment="Left"/>
+                        <mah:NumericUpDown x:Name="CurrentArtistSeparatorMinLength" Value="40" Width="70" HorizontalAlignment="Right"  ValueChanged="CurrentArtistSeparatorMinLength_ValueChanged"/>
+                    </Grid>
+                    <quickPlay:FileSaveBrowser x:Name="CurrentArtistFileOverflow"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <Grid x:Name="StartGrid" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="180*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="180*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="StartButton" Content="Start"  Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Height="40" Click="StartButton_Click"/>
+
+            <Label Content="Poll Rate (ms)"  Grid.Column="4"/>
+            <mah:NumericUpDown Value="{Binding Source={x:Static properties:Settings.Default}, Path=PollRate}" Grid.Column="4" Height="32" Width="150"/>
+
+            <Label Content="Process Name"  Grid.Column="0" HorizontalAlignment="Right" HorizontalContentAlignment="Right"/>
+            <TextBox Text="{Binding Source={x:Static properties:Settings.Default}, Path=SpotifyProcessName}" Grid.Column="0" Height="32" Width="150" VerticalContentAlignment="Center"/>
+        </Grid>
+    </Grid>
+</mah:MetroWindow>

@@ -1,0 +1,1 @@
+﻿namespace QuickPlay { public partial class App { } }

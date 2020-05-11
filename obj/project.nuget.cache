@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "LlgX3SxRhK+nh6OPV11No4hckUftRkKvyBDziqAnj9yGauQu64CD+6+SpLd4ENTXUXWLlArruQ7zW/9BafmRLg==",
+  "success": true,
+  "projectFilePath": "E:\\Projects\\Visual Studio\\QuickPlay\\QuickPlay.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\codyc\\.nuget\\packages\\controlzex\\4.3.0-alpha0085\\controlzex.4.3.0-alpha0085.nupkg.sha512",
+    "C:\\Users\\codyc\\.nuget\\packages\\mahapps.metro\\2.0.0-alpha0775\\mahapps.metro.2.0.0-alpha0775.nupkg.sha512",
+    "C:\\Users\\codyc\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.19\\microsoft.xaml.behaviors.wpf.1.1.19.nupkg.sha512",
+    "C:\\Users\\codyc\\.nuget\\packages\\ookii.dialogs.wpf\\1.1.0\\ookii.dialogs.wpf.1.1.0.nupkg.sha512"
+  ],
+  "logs": []
+}

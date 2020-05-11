@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "restore": {
+    "E:\\Projects\\Visual Studio\\QuickPlay\\QuickPlay.csproj": {}
+  },
+  "projects": {
+    "E:\\Projects\\Visual Studio\\QuickPlay\\QuickPlay.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Projects\\Visual Studio\\QuickPlay\\QuickPlay.csproj",
+        "projectName": "QuickPlay",
+        "projectPath": "E:\\Projects\\Visual Studio\\QuickPlay\\QuickPlay.csproj",
+        "packagesPath": "C:\\Users\\codyc\\.nuget\\packages\\",
+        "outputPath": "E:\\Projects\\Visual Studio\\QuickPlay\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\codyc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "E:\\Projects\\Visual Studio\\_NuGet\\_Packages": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net472": {
+          "dependencies": {
+            "MahApps.Metro": {
+              "target": "Package",
+              "version": "[2.0.0-alpha0775, )"
+            },
+            "Ookii.Dialogs.Wpf": {
+              "target": "Package",
+              "version": "[1.1.0, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}
