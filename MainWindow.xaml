@@ -7,6 +7,7 @@
         xmlns:quickPlay="clr-namespace:QuickPlay"
         xmlns:properties="clr-namespace:QuickPlay.Properties"
         x:Class="QuickPlay.MainWindow"
+        StateChanged="MetroWindow_StateChanged"
         mc:Ignorable="d"
         Background="#242424"
         Title="QuickPlay" Height="320" Width="600">

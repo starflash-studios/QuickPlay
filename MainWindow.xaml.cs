@@ -1,18 +1,24 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Threading;
-
 using Ookii.Dialogs.Wpf;
+using QuickPlay.Properties;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace QuickPlay {
     public partial class MainWindow : INotifyPropertyChanged  {
+        static NotifyIcon _TrayIcon;
         static DispatcherTimer _PollTimer;
 
         string _CurrentlyPlayingFileFormat;
@@ -41,8 +47,78 @@ namespace QuickPlay {
             _ArtistMinSeparatorLength = (int)(CurrentArtistSeparatorMinLength.Value ?? 40d);
             _ArtistSeparator = CurrentArtistSeparator.Text;
 
-            CheckUseTrackSeparator.IsChecked = Properties.Settings.Default.TrackOverflow;
-            CheckUseArtistSeparator.IsChecked = Properties.Settings.Default.ArtistOverflow;
+            CheckUseTrackSeparator.IsChecked = Settings.Default.TrackOverflow;
+            CheckUseArtistSeparator.IsChecked = Settings.Default.ArtistOverflow;
+
+            AssignTrayIcon();
+        }
+
+        public void AssignTrayIcon() {
+            _TrayIcon = new NotifyIcon {
+                Icon = Properties.Resources.IconOrange,
+                Visible = false,
+                BalloonTipTitle = Title, //Windows XP compatibility?
+                BalloonTipText = "Show the QuickPlay window for configuration.", 
+                BalloonTipIcon = ToolTipIcon.Info, //Windows XP compatibility?
+                Text = "Show the QuickPlay window for configuration."
+            };
+            _TrayIcon.Click += TrayIcon_DoubleClick;
+            HideTray();
+        }
+
+        void TrayIcon_DoubleClick(object Sender, EventArgs E) => HideTray();
+
+        public void HideTray() {
+            _TrayIcon.Visible = false;
+            Show();
+            Restore(this);
+        }
+
+        public void ShowTray() {
+            _TrayIcon.Visible = true;
+            Hide();
+        }
+
+        [DllImport("user32.dll")]
+        static extern int ShowWindow(IntPtr HWnd, uint Msg);
+
+        const uint Sw_Restore = 0x09;
+
+        public static void Restore(Window Window) {
+            // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
+            switch (Window.WindowState) {
+                case WindowState.Minimized:
+                    ShowWindow(new WindowInteropHelper(Window).Handle, Sw_Restore);
+                    break;
+            }
+        }
+
+        void MetroWindow_StateChanged(object Sender, EventArgs E) {
+            Debug.WriteLine("=> " + Visibility + " | TI: " + _TrayIcon.Visible);
+            Debug.WriteLine("Sender: " + Sender + " | " + E);
+            switch (_TrayIcon.Visible) {
+                case true:
+                    HideTray();
+                    break;
+                case false:
+                    ShowTray();
+                    break;
+            }
+            //switch (Visibility) {
+            //    case Visibility.Visible: //Window just minimised
+            //        Debug.WriteLine("Now Visible");
+            //        //ShowTray();
+            //        break;
+            //    case Visibility.Hidden: //Window just appeared
+            //        Debug.WriteLine("Now Hidden");
+            //        //HideTray();
+            //        break;
+            //    case Visibility.Collapsed: //?
+            //        Debug.WriteLine("Now Collapsed");
+            //        break;
+            //    default:
+            //        throw new ArgumentOutOfRangeException();
+            //}
         }
 
         #region File Management
@@ -81,7 +157,7 @@ namespace QuickPlay {
                 return;
             }
 
-            _PollTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = new TimeSpan((long)(Properties.Settings.Default.PollRate * 10000d)) };
+            _PollTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = new TimeSpan((long)(Settings.Default.PollRate * 10000d)) };
             _PollTimer.Tick += _PollTimer_Tick;
             _PollTimer.Start();
         }
@@ -94,7 +170,7 @@ namespace QuickPlay {
         /// Returns the first found Spotify Process containing a title; or null
         /// </summary>
         /// <returns></returns>
-        public static Process GetSpotifyProcess() => Process.GetProcessesByName(Properties.Settings.Default.SpotifyProcessName).FirstOrDefault(P => !string.IsNullOrEmpty(P.MainWindowTitle));
+        public static Process GetSpotifyProcess() => Process.GetProcessesByName(Settings.Default.SpotifyProcessName).FirstOrDefault(P => !string.IsNullOrEmpty(P.MainWindowTitle));
 
         public static Song? GetCurrentSong() => Song.GetSpotifySong(GetSpotifyProcess());
 
@@ -106,8 +182,8 @@ namespace QuickPlay {
             get => _UseTrackSeparator;
             set {
                 if (_UseTrackSeparator != value) {
-                    Properties.Settings.Default.TrackOverflow = value;
-                    Properties.Settings.Default.Save();
+                    Settings.Default.TrackOverflow = value;
+                    Settings.Default.Save();
                     _UseTrackSeparator = value;
                     OnPropertyChanged();
                 }
@@ -119,8 +195,8 @@ namespace QuickPlay {
             get => _UseArtistSeparator;
             set {
                 if (_UseArtistSeparator != value) {
-                    Properties.Settings.Default.ArtistOverflow = value;
-                    Properties.Settings.Default.Save();
+                    Settings.Default.ArtistOverflow = value;
+                    Settings.Default.Save();
                     _UseArtistSeparator = value;
                     OnPropertyChanged();
                 }
@@ -165,7 +241,7 @@ namespace QuickPlay {
         }
 
         #region XAML Value Updaters
-        void CurrentlyPlayingFormat_TextInput(object Sender, System.Windows.Input.TextCompositionEventArgs E) {
+        void CurrentlyPlayingFormat_TextInput(object Sender, TextCompositionEventArgs E) {
             if (Sender != null && Sender is TextBlock Tb) {
                 _CurrentlyPlayingFileFormat = Tb.Text;
             }
